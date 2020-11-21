@@ -30,7 +30,7 @@ window.addEventListener('click', function (e) {
     })
       .then((res) => {})
       .catch((err) => {
-        console.log(err)
+        
       })
     sessionStorage.setItem('firstClick', 'false')
   }
