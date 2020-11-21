@@ -1,5 +1,5 @@
 function analyticscdn(){
-  // $( document ).ready(function() {
+  
     console.log( "ready!" );
     
 
