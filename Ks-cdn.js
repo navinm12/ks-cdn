@@ -1,41 +1,44 @@
-console.log('ready!')
-var start = new Date()
-window.addEventListener('click', function (e) {
-  var firstClick = sessionStorage.getItem('firstClick')
-  if (firstClick == 'true') {
-    var end = new Date()
-    var userIpv4
-    var urlpage = window.location.href
+async function fetchIp() {
+        const response = await fetch('https://api.ipify.org?format=json')
+        const jsonIp = await response.json()
+        if (jsonIp?.ip) {
+          let pageUrl = window.location.href
+          let currentIp = jsonIp.ip
 
-    fetch('https://api.ipify.org?format=json')
-      .then((response) => response.json())
-      .then((response) => {
-        userIpv4 = response.ip
-        sessionStorage.setItem('ip', userIpv4)
-      })
-      .catch((err) => console.log(err))
-    var ip = sessionStorage.getItem('ip')
-    fetch('https://knews-vscaleup-api.herokuapp.com/api/analytics/create', {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'post',
-      body: JSON.stringify({
-        timeSpent: Math.floor((end - start) / 1000),
-        ip: ip,
-        page: urlpage,
-        appVersion: window.navigator.appVersion,
-      }),
-    })
-      .then((res) => {})
-      .catch((err) => {
-        
-      })
-    sessionStorage.setItem('firstClick', 'false')
-  }
-})
+          // document.addEventListener('click', function () {
+          if (
+            sessionStorage.getItem('user_ip') !== currentIp ||
+            sessionStorage.getItem('page_url') !== pageUrl
+          ) {
+            // let end = TimeMe.getTimeOnCurrentPageInSeconds()
 
-window.onload = function () {
-  sessionStorage.setItem('firstClick', 'true')
-}
+            fetch('http://localhost:6001/api/analytics/create', {
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              method: 'post',
+              body: JSON.stringify({
+                // timeSpent: end,
+                ip: currentIp,
+                page: pageUrl,
+                appVersion: window.navigator.appVersion,
+                pageTitle: document.title.split('|')[0],
+                // category: document.title.split('|')[1],
+              }),
+            })
+              .then((response) => {
+                sessionStorage.setItem('page_title', document.title)
+                sessionStorage.setItem('user_ip', currentIp)
+                sessionStorage.setItem('page_url', pageUrl)
+              })
+              .catch((err) => console.log(err))
+          }
+          // })
+        }
+      }
+      // TimeMe.initialize({
+      //   currentPageName: 'my-home-page', // current page
+      //   idleTimeoutInSeconds: 30, // seconds
+      // })
+      fetchIp()
