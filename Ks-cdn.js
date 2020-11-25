@@ -37,8 +37,5 @@ async function fetchIp() {
           // })
         }
       }
-      // TimeMe.initialize({
-      //   currentPageName: 'my-home-page', // current page
-      //   idleTimeoutInSeconds: 30, // seconds
-      // })
+  
       fetchIp()
