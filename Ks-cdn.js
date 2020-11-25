@@ -12,7 +12,7 @@ async function fetchIp() {
           ) {
             // let end = TimeMe.getTimeOnCurrentPageInSeconds()
 
-            fetch('http://localhost:6001/api/analytics/create', {
+            fetch('https://knews-vscaleup-api.herokuapp.com/api/analytics/create', {
               headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
